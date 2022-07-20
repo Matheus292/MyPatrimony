@@ -35,7 +35,7 @@ public class MyPatrimonyApplication {
 	}
 
 	@Bean
-	public ConfigProperties getConfigProperites(){
+	public ConfigProperties getConfigProperties(){
 		return new ConfigProperties();
 	}
 
