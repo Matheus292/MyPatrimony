@@ -42,7 +42,8 @@ public class JwtConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
+        http.cors().and()
+                .csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/signUp").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/forgotPassword").permitAll()
