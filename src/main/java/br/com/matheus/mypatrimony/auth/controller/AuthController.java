@@ -1,12 +1,12 @@
 package br.com.matheus.mypatrimony.auth.controller;
 
-import br.com.matheus.mypatrimony.auth.repository.Login;
+import br.com.matheus.mypatrimony.auth.dto.LoginDTO;
 import br.com.matheus.mypatrimony.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -15,8 +15,8 @@ public class AuthController {
     private AuthService service;
 
     @PostMapping("/signUp")
-    public ResponseEntity signup(){
-        return null;
+    public ResponseEntity signup(@RequestBody @Valid LoginDTO dto){
+        return service.signUp(dto);
     }
 
     @PostMapping("/forgotPassword")

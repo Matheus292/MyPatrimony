@@ -3,6 +3,7 @@ package br.com.matheus.mypatrimony.auth.repository;
 
 import br.com.matheus.mypatrimony.general.enums.Status;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

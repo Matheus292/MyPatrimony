@@ -53,6 +53,7 @@ public class JwtConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthenticateFilter(authenticationManager(), configProperties))
                 .addFilter(new JwtValidateFilter(authenticationManager(), configProperties))
+
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
