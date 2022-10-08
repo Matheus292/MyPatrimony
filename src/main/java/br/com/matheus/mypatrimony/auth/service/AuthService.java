@@ -4,7 +4,6 @@ import br.com.matheus.mypatrimony.auth.dto.LoginDTO;
 import br.com.matheus.mypatrimony.auth.repository.ILoginRepository;
 import br.com.matheus.mypatrimony.auth.repository.Login;
 import br.com.matheus.mypatrimony.auth.repository.LoginType;
-import br.com.matheus.mypatrimony.error.exception.ApiException;
 import br.com.matheus.mypatrimony.general.enums.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,11 +23,6 @@ public class AuthService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    public Login save(Login login){
-        login.setPassword(passwordEncoder.encode(login.getPassword()));
-        return repository.save(login);
-    }
 
     public ResponseEntity signUp(LoginDTO dto){
 
