@@ -3,7 +3,6 @@ package br.com.matheus.mypatrimony.security.filter;
 import br.com.matheus.mypatrimony.auth.dto.LoginErrorDTO;
 import br.com.matheus.mypatrimony.auth.repository.Login;
 import br.com.matheus.mypatrimony.config.ConfigProperties;
-import br.com.matheus.mypatrimony.error.exception.ApiException;
 import br.com.matheus.mypatrimony.security.data.LoginData;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

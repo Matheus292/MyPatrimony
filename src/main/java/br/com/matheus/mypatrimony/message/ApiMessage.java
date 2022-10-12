@@ -1,4 +1,4 @@
-package br.com.matheus.mypatrimony.error.exception;
+package br.com.matheus.mypatrimony.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +13,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiException{
+public class ApiMessage{
     private HttpStatus status;
     private String message;
     private List<FieldError> errors = new ArrayList<>();
 
-    public ApiException(HttpStatus status, String message) {
+    public ApiMessage(HttpStatus status, String message) {
         this.status = status;
         this.message = message;
     }

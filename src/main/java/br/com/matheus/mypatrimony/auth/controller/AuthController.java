@@ -1,5 +1,6 @@
 package br.com.matheus.mypatrimony.auth.controller;
 
+import br.com.matheus.mypatrimony.auth.dto.ForgotPasswordDTO;
 import br.com.matheus.mypatrimony.auth.dto.LoginDTO;
 import br.com.matheus.mypatrimony.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class AuthController {
     }
 
     @PostMapping("/forgotPassword")
-    public ResponseEntity forgotPassword(){
-        return null;
+    public ResponseEntity forgotPassword(@RequestBody @Valid ForgotPasswordDTO dto){
+        return service.forgotPassword(dto);
     }
 
     @PostMapping("/newPassword")

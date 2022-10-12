@@ -1,6 +1,6 @@
 package br.com.matheus.mypatrimony.error;
 
-import br.com.matheus.mypatrimony.error.exception.ApiException;
+import br.com.matheus.mypatrimony.message.ApiMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +24,15 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler
             HttpStatus status,
             WebRequest request) {
 
-        final List<ApiException.FieldError> fields = new ArrayList<>();
+        final List<ApiMessage.FieldError> fields = new ArrayList<>();
 
         ex.getBindingResult().getAllErrors().forEach(field ->{
             FieldError f = (FieldError) field;
-            fields.add(new ApiException.FieldError( f.getField() , f.getDefaultMessage()));
+            fields.add(new ApiMessage.FieldError( f.getField() , f.getDefaultMessage()));
         });
 
         return handleExceptionInternal(ex,
-                new ApiException(HttpStatus.BAD_REQUEST, "Falha na validação dos campos", fields),
+                new ApiMessage(HttpStatus.BAD_REQUEST, "Falha na validação dos campos", fields),
                 headers,
                 HttpStatus.BAD_REQUEST,
                 request);
@@ -46,7 +46,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler
             WebRequest request){
 
         return handleExceptionInternal(ex,
-                new ApiException(HttpStatus.BAD_REQUEST, "Json inválido", new ArrayList<>()),
+                new ApiMessage(HttpStatus.BAD_REQUEST, "Json inválido", new ArrayList<>()),
                 headers,
                 HttpStatus.BAD_REQUEST,
                 request);
