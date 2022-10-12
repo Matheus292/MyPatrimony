@@ -2,6 +2,7 @@ package br.com.matheus.mypatrimony.auth.service;
 
 import br.com.matheus.mypatrimony.auth.dto.ForgotPasswordDTO;
 import br.com.matheus.mypatrimony.auth.dto.LoginDTO;
+import br.com.matheus.mypatrimony.auth.dto.NewPasswordDTO;
 import br.com.matheus.mypatrimony.auth.repository.ILoginRepository;
 import br.com.matheus.mypatrimony.auth.repository.Login;
 import br.com.matheus.mypatrimony.auth.repository.LoginType;
@@ -90,6 +91,30 @@ public class AuthService {
                 .body(new ApiMessage(HttpStatus.OK, "E-mail enviado para " + login.getEmail()));
     }
 
+    public ResponseEntity newPassword(NewPasswordDTO dto) {
+
+        Optional<Login> loginOptional = repository.findByLogin(dto.getLogin());
+
+        if(!loginOptional.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiMessage(HttpStatus.NOT_FOUND, "Usuário não existe"));
+
+        Date now = new Date();
+
+        final Login login = loginOptional.get();
+        if(!dto.getCode().equals(login.getCode()) || now.after(login.getExpirationDate()))
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiMessage(HttpStatus.BAD_REQUEST, "Código inválido"));
+
+        login.setExpirationDate(null);
+        login.setCode(null);
+        login.setPassword(passwordEncoder.encode(dto.getPassoword()));
+
+        repository.save(login);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiMessage(HttpStatus.OK, "Senha alterada com sucesso."));
+    }
 
 
     private void addCodeForgotPassword(Login login){
@@ -117,4 +142,6 @@ public class AuthService {
 
         mailService.sendMail(emailDTO);
     }
+
+
 }
