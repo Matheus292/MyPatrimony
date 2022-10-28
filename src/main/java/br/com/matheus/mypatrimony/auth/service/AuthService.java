@@ -20,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -50,10 +47,8 @@ public class AuthService {
 
         Optional<Login> loginOptional = repository.findByLogin(dto.getLogin());
 
-        if(!loginOptional.isEmpty())
+        if(loginOptional.isPresent())
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-
-        log.info("Seu pass: " + passwordEncoder);
 
         Login login = Login.builder()
                 .login(dto.getLogin())
@@ -77,7 +72,7 @@ public class AuthService {
 
         Optional<Login> loginOptional = repository.findByLogin(dto.getLogin());
 
-        if(!loginOptional.isPresent())
+        if(loginOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiMessage(HttpStatus.NOT_FOUND, "Usuário não existe"));
 
@@ -104,7 +99,7 @@ public class AuthService {
         Date now = new Date();
 
         final Login login = loginOptional.get();
-        if(!dto.getCode().equals(login.getCode()) || now.after(login.getExpirationDate()))
+        if(Objects.isNull(login.getCode()) || Objects.isNull(login.getExpirationDate()) || !dto.getCode().equals(login.getCode()) || now.after(login.getExpirationDate()))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiMessage(HttpStatus.BAD_REQUEST, "Código inválido"));
 
