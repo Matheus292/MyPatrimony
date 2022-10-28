@@ -50,8 +50,10 @@ public class AuthService {
 
         Optional<Login> loginOptional = repository.findByLogin(dto.getLogin());
 
-        if(loginOptional.isPresent())
+        if(!loginOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+
+        log.info("Seu pass: " + passwordEncoder);
 
         Login login = Login.builder()
                 .login(dto.getLogin())
