@@ -1,17 +1,21 @@
 package br.com.matheus.mypatrimony.security.filter;
 
+import br.com.matheus.mypatrimony.auth.dto.LoginErrorDTO;
 import br.com.matheus.mypatrimony.auth.repository.Login;
 import br.com.matheus.mypatrimony.config.ConfigProperties;
-import br.com.matheus.mypatrimony.error.exception.ApiException;
 import br.com.matheus.mypatrimony.security.data.LoginData;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class JwtAuthenticateFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
@@ -47,8 +54,9 @@ public class JwtAuthenticateFilter extends UsernamePasswordAuthenticationFilter 
                     new UsernamePasswordAuthenticationToken(object.getLogin(), object.getPassword(), new ArrayList<>())
             );
         }
-        catch (IOException e) {
-            throw new ApiException(HttpStatus.BAD_GATEWAY, "Corpo de entrada inválido!");
+        catch (Exception e) {
+           sendReponse(response);
+           return null;
         }
 
     }
@@ -65,5 +73,21 @@ public class JwtAuthenticateFilter extends UsernamePasswordAuthenticationFilter 
 
         response.getWriter().write(token);
         response.getWriter().flush();
+    }
+
+    private void sendReponse(HttpServletResponse response){
+        try{
+            final Gson gson = new Gson();
+            final LoginErrorDTO loginErrorDTO = new LoginErrorDTO(HttpStatus.UNAUTHORIZED.value(), "Usuário ou senha inválidos");
+
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType(MediaType.APPLICATION_JSON.toString());
+            response.getWriter()
+                    .write(gson.toJson(loginErrorDTO));
+        }
+        catch(IOException e){
+            throw new RuntimeException(e);
+        }
     }
 }

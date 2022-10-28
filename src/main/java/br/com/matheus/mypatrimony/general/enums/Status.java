@@ -12,4 +12,10 @@ public enum Status {
     public int status() {
         return status;
     }
+
+    public final static Status getStatusById(int id){
+        if(id == 1)
+            return ACTIVE;
+        return INACTIVE;
+    }
 }
