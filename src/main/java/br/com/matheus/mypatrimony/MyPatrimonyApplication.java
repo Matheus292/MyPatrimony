@@ -38,24 +38,4 @@ public class MyPatrimonyApplication {
 	public ConfigProperties getConfigProperties(){
 		return new ConfigProperties();
 	}
-
-
-
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-			final Login login = new Login();
-			login.setLogin("teste");
-			login.setInsertionDate(new Date());
-			login.setStatus(Status.ACTIVE);
-			login.setType(LoginType.ADMIN);
-			login.setName("Matheus");
-			login.setPassword(getPasswordEncoder().encode("123"));
-
-			repository.save(login);
-		};
-	}
-
-
-
 }
