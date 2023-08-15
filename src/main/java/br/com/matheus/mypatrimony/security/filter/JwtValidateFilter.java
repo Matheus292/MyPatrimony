@@ -3,6 +3,7 @@ package br.com.matheus.mypatrimony.security.filter;
 import br.com.matheus.mypatrimony.config.ConfigProperties;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
@@ -53,10 +54,12 @@ public class JwtValidateFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String token){
-        String user = JWT.require(Algorithm.HMAC512(properties.getSecretKey())).build().verify(token).getSubject();
-
-        if(Objects.isNull(user))
-            return null;
+        String user = null;
+        try {
+           user = JWT.require(Algorithm.HMAC256(properties.getSecretKey())).build().verify(token).getSubject();
+        } catch (Exception jwtDecodeException){
+           user = "";
+        }
 
         return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
     }

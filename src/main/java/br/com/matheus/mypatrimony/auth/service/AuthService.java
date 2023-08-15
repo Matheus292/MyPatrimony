@@ -3,6 +3,7 @@ package br.com.matheus.mypatrimony.auth.service;
 import br.com.matheus.mypatrimony.auth.dto.ForgotPasswordDTO;
 import br.com.matheus.mypatrimony.auth.dto.LoginDTO;
 import br.com.matheus.mypatrimony.auth.dto.NewPasswordDTO;
+import br.com.matheus.mypatrimony.auth.dto.SessionLoginDTO;
 import br.com.matheus.mypatrimony.auth.repository.ILoginRepository;
 import br.com.matheus.mypatrimony.auth.repository.Login;
 import br.com.matheus.mypatrimony.auth.repository.LoginType;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -140,5 +142,18 @@ public class AuthService {
         mailService.sendMail(emailDTO);
     }
 
+    public ResponseEntity check(){
+        final String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        Optional<Login> loginOptional = repository.findByLogin(currentUserName);
+        final Login login = loginOptional.get();
+
+        final SessionLoginDTO session = new SessionLoginDTO();
+        session.setId(login.getId());
+        session.setLogin(login.getLogin());
+        session.setName(login.getName());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(session);
+    }
 }

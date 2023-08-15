@@ -6,6 +6,7 @@ import br.com.matheus.mypatrimony.auth.dto.NewPasswordDTO;
 import br.com.matheus.mypatrimony.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,5 +31,11 @@ public class AuthController {
     public ResponseEntity newPassword(@RequestBody @Valid NewPasswordDTO dto){
         return service.newPassword(dto);
     }
+
+    @GetMapping("/check")
+    public ResponseEntity checkLogin(){
+       return service.check();
+    }
+
 
 }
